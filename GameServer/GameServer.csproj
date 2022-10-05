@@ -12,4 +12,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Packets\Packets.csproj" />
+    <ProjectReference Include="C:\Users\Марян\Desktop\NetCoreServer\source\NetCoreServer\NetCoreServer.csproj" />
+  </ItemGroup>
+
 </Project>
