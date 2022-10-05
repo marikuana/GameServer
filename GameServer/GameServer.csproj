@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NetCoreServer\source\NetCoreServer\NetCoreServer.csproj" />
     <ProjectReference Include="..\Packets\Packets.csproj" />
-    <ProjectReference Include="C:\Users\Марян\Desktop\NetCoreServer\source\NetCoreServer\NetCoreServer.csproj" />
   </ItemGroup>
 
 </Project>
