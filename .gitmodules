@@ -1,3 +1,6 @@
 [submodule "NetCoreServer"]
 	path = NetCoreServer
 	url = https://github.com/chronoxor/NetCoreServer.git
+[submodule "Packets"]
+	path = Packets
+	url = https://github.com/marikuana/Packets.git
