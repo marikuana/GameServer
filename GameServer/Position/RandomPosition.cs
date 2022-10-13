@@ -4,12 +4,19 @@ namespace GameServer
 {
     public class RandomPosition : IPosition
     {
+        private readonly Random _random;
+        private float _range;
+        public RandomPosition(float range = 10f)
+        {
+            _range = range;
+            _random = new Random();
+        }
+
         public Vector3 Pos
         {
             get
             {
-                Random random = new Random();
-                return new Vector3(random.NextInt64(10), random.NextInt64(10), random.NextInt64(10));
+                return new Vector3(_random.NextSingle() * _range, _random.NextSingle() * _range, _random.NextSingle() * _range);
             }
         }
     }

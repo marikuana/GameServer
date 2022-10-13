@@ -26,6 +26,16 @@ namespace GameServer
             Update();
         }
 
+        public void StartAsync()
+        {
+            if (_running)
+                return;
+            _running = true;
+
+            lastUpdate = DateTime.UtcNow;
+            Task.Run(Update);
+        }
+
         public void Stop()
         {
             if (!_running)
