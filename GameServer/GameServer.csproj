@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NetCoreServer\source\NetCoreServer\NetCoreServer.csproj" />
+    <ProjectReference Include="..\Packets\Packets\Packets.csproj" />
   </ItemGroup>
 
 </Project>

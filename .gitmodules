@@ -4,3 +4,4 @@
 [submodule "Packets"]
 	path = Packets
 	url = https://github.com/marikuana/Packets.git
+	branch = master
