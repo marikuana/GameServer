@@ -12,13 +12,18 @@ namespace GameServer
             RegisterServices();
 
             Start();
+
+            while (true)
+            {
+                Console.ReadLine();
+            }
         }
 
         public static void RegisterServices()
         {
             var build = new ServiceCollection();
 
-            build.AddTransient<ILogger, Logger>();
+            build.AddTransient<ILogger, ConsoleLogger>();
             build.AddTransient<EntityFactory>();
 
             build.AddSingleton<EntityManager>();
@@ -26,10 +31,14 @@ namespace GameServer
             build.AddSingleton<IUpdate, FakeUpdate>();
             build.AddSingleton<SimulationService>();
 
+            build.AddSingleton<Packets.PacketFactory>();
+            build.AddSingleton<PacketHandler>();
+            build.AddSingleton<SessionFactory>();
             build.AddSingleton(service =>
             {
                 ILogger logger = service.GetRequiredService<ILogger>();
-                return new Server(logger, IPAddress.Any, 4444);
+                SessionFactory sessionFactory = service.GetRequiredService<SessionFactory>();
+                return new Server(logger, sessionFactory, IPAddress.Any, 4444);
             });
 
             container = build.BuildServiceProvider();
@@ -38,10 +47,11 @@ namespace GameServer
         public static void Start()
         {
             var server = container.GetRequiredService<Server>();
-            server.Start();
-
             var simulation = container.GetRequiredService<SimulationService>();
-            simulation.Start();
+
+            server.Start();
+            simulation.StartAsync();
+
         }
     }
 }

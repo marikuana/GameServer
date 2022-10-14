@@ -7,15 +7,17 @@ namespace GameServer
     public class Server : TcpServer
     {
         private ILogger _logger;
+        private SessionFactory _sessionFactory;
 
-        public Server(ILogger logger, IPAddress address, int port) : base(address, port)
+        public Server(ILogger logger, SessionFactory sessionFactory, IPAddress address, int port) : base(address, port)
         {
             _logger = logger;
+            _sessionFactory = sessionFactory;
         }
 
         protected override TcpSession CreateSession()
         {
-            return new Session(_logger, this);
+            return _sessionFactory.Create(this);
         }
 
         public void Multicast(Packet packet)
