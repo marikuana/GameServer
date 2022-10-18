@@ -1,4 +1,4 @@
-﻿namespace GameServer
+﻿namespace GameServerCore
 {
     public interface ILogger
     {

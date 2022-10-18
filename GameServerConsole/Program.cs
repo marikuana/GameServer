@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net;
+using GameServerCore;
 
-namespace GameServerCore
+namespace GameServerConsole
 {
     public class Program
     {

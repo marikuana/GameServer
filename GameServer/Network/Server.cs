@@ -2,7 +2,7 @@
 using System.Net;
 using Packets;
 
-namespace GameServer
+namespace GameServerCore
 {
     public class Server : TcpServer
     {

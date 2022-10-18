@@ -2,7 +2,7 @@
 using Packets;
 using System.Text;
 
-namespace GameServer
+namespace GameServerCore
 {
 
     public class Session : TcpSession

@@ -1,6 +1,6 @@
 ﻿using Packets;
 
-namespace GameServer
+namespace GameServerCore
 {
     public abstract class HandlePacket<T> where T : Packet
     {

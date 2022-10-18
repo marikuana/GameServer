@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace GameServer
+namespace GameServerCore
 {
     public class EntityManager : IUpdate
     {

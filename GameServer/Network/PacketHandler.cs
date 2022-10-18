@@ -2,7 +2,7 @@
 using Packets;
 using System.Reflection;
 
-namespace GameServer
+namespace GameServerCore
 {
     public class PacketHandler
     {
