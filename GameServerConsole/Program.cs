@@ -24,6 +24,7 @@ namespace GameServerConsole
         {
             var build = new ServiceCollection();
 
+            build.AddSingleton(new ConfigProvider().GetConfiguration());
             build.AddTransient<ILogger, ConsoleLogger>();
             build.AddTransient<EntityFactory>();
 
@@ -35,12 +36,7 @@ namespace GameServerConsole
             build.AddSingleton<Packets.PacketFactory>();
             build.AddSingleton<PacketHandler>();
             build.AddSingleton<SessionFactory>();
-            build.AddSingleton(service =>
-            {
-                ILogger logger = service.GetRequiredService<ILogger>();
-                SessionFactory sessionFactory = service.GetRequiredService<SessionFactory>();
-                return new Server(logger, sessionFactory, IPAddress.Any, 4444);
-            });
+            build.AddSingleton<Server>();
 
             container = build.BuildServiceProvider();
         }

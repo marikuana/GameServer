@@ -9,7 +9,7 @@ namespace GameServerCore
         private ILogger _logger;
         private SessionFactory _sessionFactory;
 
-        public Server(ILogger logger, SessionFactory sessionFactory, IPAddress address, int port) : base(address, port)
+        public Server(ILogger logger, SessionFactory sessionFactory, Configuration configuration) : base(configuration.ListenerIP, configuration.ListenerPort)
         {
             _logger = logger;
             _sessionFactory = sessionFactory;
@@ -57,7 +57,7 @@ namespace GameServerCore
 
         protected override void OnStarting()
         {
-            _logger.Log("Starting");
+            _logger.Log($"Starting on port: {Port}");
             base.OnStarting();
         }
 
