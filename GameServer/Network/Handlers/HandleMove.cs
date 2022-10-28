@@ -1,4 +1,5 @@
 ﻿using Packets;
+using Microsoft.Extensions.Logging;
 
 namespace GameServerCore
 {
@@ -6,14 +7,14 @@ namespace GameServerCore
     {
         private ILogger _logger;
 
-        public HandleMove(ILogger logger)
+        public HandleMove(ILogger<HandleMove> logger)
         {
             _logger = logger;
         }
 
         public override void Invoke(GoTo packet)
         {
-            _logger.Log($"HandleMove: {packet.Position}");
+            _logger.LogDebug($"HandleMove: {packet.Position}");
         }
     }
 }

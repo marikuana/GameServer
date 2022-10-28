@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace GameServerCore
 {
@@ -10,7 +11,7 @@ namespace GameServerCore
 
         private ILogger logger;
 
-        public SimulationService(IEnumerable<IUpdate> updates, ILogger logger)
+        public SimulationService(IEnumerable<IUpdate> updates, ILogger<SimulationService> logger)
         {
             this.updates = updates;
             this.logger = logger;
@@ -54,7 +55,7 @@ namespace GameServerCore
                 {
                     update.Update(time);
                 }
-                logger.Log($"Update: {time.TotalMilliseconds} ms");
+                logger.LogInformation($"Update: {time.TotalMilliseconds} ms");
             }
         }
     }

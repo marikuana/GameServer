@@ -1,6 +1,7 @@
 ﻿using NetCoreServer;
 using Packets;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace GameServerCore
 {
@@ -10,7 +11,7 @@ namespace GameServerCore
         private ILogger _logger;
         private PacketHandler _packetHandler;
 
-        public Session(ILogger logger, TcpServer server, PacketHandler packetHandler) : base(server)
+        public Session(ILogger<Session> logger, TcpServer server, PacketHandler packetHandler) : base(server)
         {
             _logger = logger;
             _packetHandler = packetHandler;
