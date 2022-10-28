@@ -1,7 +1,19 @@
-﻿namespace GameServerCore
+﻿using Microsoft.Extensions.Logging;
+
+namespace GameServerCore
 {
-    public abstract class GameObjectFactory<Builder, Object> where Builder : GameObjectBuilder<Object> where Object : GameObject
+    public abstract class GameObjectFactory<Object> where Object : GameObject
     {
-        public abstract Object Create(Action<Builder> action);
+        private ILoggerFactory _loggerFactory;
+
+        public GameObjectFactory(ILoggerFactory loggerFactory)
+        {
+            _loggerFactory = loggerFactory;
+        }
+
+        public abstract Object Create();
+
+        protected ILogger<Object> GetLogger() =>
+            _loggerFactory.CreateLogger<Object>();
     }
 }
