@@ -1,18 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using GameServerCore;
+using Microsoft.Extensions.Logging;
 
 namespace GameServerConsole
 {
     public class Program
     {
-        public static IServiceProvider container;
-
         public static void Main(string[] args)
         {
-            RegisterServices();
+            var serviceCollection = new ServiceCollection();
+            IServiceCollection services = ConfigureServices(serviceCollection);
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            Start();
+            Start(serviceProvider);
 
             while (true)
             {
@@ -20,35 +21,37 @@ namespace GameServerConsole
             }
         }
 
-        public static void RegisterServices()
+        public static IServiceCollection ConfigureServices(IServiceCollection services)
         {
-            var build = new ServiceCollection();
+            services.AddLogging(configure => {
+                configure.SetMinimumLevel(LogLevel.Trace);
+                configure.AddConsole();
+            });
 
-            build.AddSingleton(new ConfigProvider().GetConfiguration());
-            build.AddTransient<ILogger, ConsoleLogger>();
-            build.AddTransient<EntityFactory>();
+            services.AddSingleton(new ConfigProvider().GetConfiguration());
 
-            build.AddSingleton<EntityManager>();
-            build.AddSingleton<IUpdate, EntityManager>(service => service.GetRequiredService<EntityManager>());
-            build.AddSingleton<IUpdate, FakeUpdate>();
-            build.AddSingleton<SimulationService>();
+            services.AddTransient<EntityFactory>();
 
-            build.AddSingleton<Packets.PacketFactory>();
-            build.AddSingleton<PacketHandler>();
-            build.AddSingleton<SessionFactory>();
-            build.AddSingleton<Server>();
+            services.AddSingleton<EntityManager>();
+            services.AddSingleton<IUpdate, EntityManager>(service => service.GetRequiredService<EntityManager>());
+            services.AddSingleton<IUpdate, FakeUpdate>();
+            services.AddSingleton<SimulationService>();
 
-            container = build.BuildServiceProvider();
+            services.AddSingleton<Packets.PacketFactory>();
+            services.AddSingleton<PacketHandler>();
+            services.AddSingleton<SessionFactory>();
+            services.AddSingleton<Server>();
+
+            return services;
         }
 
-        public static void Start()
+        public static void Start(IServiceProvider service)
         {
-            var server = container.GetRequiredService<Server>();
-            var simulation = container.GetRequiredService<SimulationService>();
+            var server = service.GetRequiredService<Server>();
+            var simulation = service.GetRequiredService<SimulationService>();
 
             server.Start();
             simulation.StartAsync();
-
         }
     }
 }
