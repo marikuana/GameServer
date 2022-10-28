@@ -1,16 +1,15 @@
 ﻿using System.Numerics;
+using Microsoft.Extensions.Logging;
 
 namespace GameServerCore
 {
-    public class Entity : IUpdate
+    public class Entity : GameObject
     {
         private ILogger _logger;
 
-        public Vector3 Position { get; set; }
-
         private IPosition? targetPos;
 
-        public Entity(ILogger logger)
+        public Entity(ILogger<Entity> logger)
         {
             _logger = logger;
         }
@@ -35,7 +34,7 @@ namespace GameServerCore
                 Vector3 vector = Vector3.Normalize(targetPos.Pos - Position);
                 Position += vector * dis; 
             }
-            _logger.Log($"EntityPos: {Position}");
+            _logger.LogDebug($"Entity {Id} Pos: {Position}");
         }
     }
 }
