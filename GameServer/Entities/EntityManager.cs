@@ -1,32 +1,33 @@
 ﻿using System.Numerics;
+using Microsoft.Extensions.Logging;
 
 namespace GameServerCore
 {
     public class EntityManager : IUpdate
     {
-        private IList<Entity> _entities;
-        private ILogger _logger;
+        private List<Entity> _entities;
+        private ILogger<EntityManager> _logger;
         private EntityFactory _entityFactory;
 
-        public EntityManager(ILogger logger, EntityFactory entityFactory)
+        public EntityManager(ILogger<EntityManager> logger, EntityFactory entityFactory)
         {
             _entities = new List<Entity>();
             _logger = logger;
             _entityFactory = entityFactory;
         }
 
-        public Entity CreateEntity()
-        {
-            return CreateEntity(new Vector3());
-        }
+        private List<Entity> entitiesToAdd = new List<Entity>();
 
-        public Entity CreateEntity(Vector3 pos)
+        public Entity CreateEntity(Action<EntityBuilder> action)
         {
-            Entity entity = _entityFactory.GetEntity();
-            entity.Position = pos;
+            Entity entity = _entityFactory.Create();
 
-            _entities.Add(entity);
-            _logger.Log($"CreateEntity: {pos}");
+            EntityBuilder entityBuilder = new EntityBuilder(entity);
+            action(entityBuilder);
+            entity = entityBuilder.Build();
+
+            entitiesToAdd.Add(entity);
+            _logger.LogDebug($"CreateEntity: {entity.Position}");
             return entity;
         }
 
@@ -36,6 +37,8 @@ namespace GameServerCore
             {
                 entity.Update(time);
             }
+            _entities.AddRange(entitiesToAdd);
+            entitiesToAdd.Clear();
         }
     }
 }
