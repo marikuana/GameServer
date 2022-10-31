@@ -5,22 +5,22 @@ namespace GameServerCore
 {
     public class Entity : GameObject
     {
-        private ILogger _logger;
-
         private IPosition? targetPos;
 
         public Entity(ILogger<Entity> logger)
+            : base(logger)
         {
-            _logger = logger;
         }
 
-        public void GoTo(IPosition pos)
+        public void SetTargetPosition(IPosition? pos)
         {
             targetPos = pos;
         }
 
-        public void Update(TimeSpan time)
+        internal protected override void Update(TimeSpan time)
         {
+            base.Update(time);
+
             if (targetPos != null && Position != targetPos.Pos)
             {
                 float speed = 0.001f;
