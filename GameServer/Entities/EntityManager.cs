@@ -3,20 +3,18 @@ using Microsoft.Extensions.Logging;
 
 namespace GameServerCore
 {
-    public class EntityManager : IUpdate
+    public class EntityManager
     {
-        private List<Entity> _entities;
         private ILogger<EntityManager> _logger;
         private EntityFactory _entityFactory;
+        private GameObjectManager _gameObjectManager;
 
-        public EntityManager(ILogger<EntityManager> logger, EntityFactory entityFactory)
+        public EntityManager(ILogger<EntityManager> logger, EntityFactory entityFactory, GameObjectManager gameObjectManager)
         {
-            _entities = new List<Entity>();
             _logger = logger;
             _entityFactory = entityFactory;
+            _gameObjectManager = gameObjectManager;
         }
-
-        private List<Entity> entitiesToAdd = new List<Entity>();
 
         public Entity CreateEntity(Action<EntityBuilder> action)
         {
@@ -26,19 +24,10 @@ namespace GameServerCore
             action(entityBuilder);
             entity = entityBuilder.Build();
 
-            entitiesToAdd.Add(entity);
+            _gameObjectManager.AddGameObject(entity);
+            
             _logger.LogDebug($"CreateEntity: {entity.Position}");
             return entity;
-        }
-
-        public void Update(TimeSpan time)
-        {
-            foreach (var entity in _entities.ToList())
-            {
-                entity.Update(time);
-            }
-            _entities.AddRange(entitiesToAdd);
-            entitiesToAdd.Clear();
         }
     }
 }

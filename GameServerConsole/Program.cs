@@ -33,7 +33,8 @@ namespace GameServerConsole
             services.AddTransient<EntityFactory>();
 
             services.AddSingleton<EntityManager>();
-            services.AddSingleton<IUpdate, EntityManager>(service => service.GetRequiredService<EntityManager>());
+            services.AddSingleton<GameObjectManager>();
+            services.AddSingleton<IUpdate, GameObjectManager>(service => service.GetRequiredService<GameObjectManager>());
             services.AddSingleton<IUpdate, FakeUpdate>();
             services.AddSingleton<SimulationService>();
 
