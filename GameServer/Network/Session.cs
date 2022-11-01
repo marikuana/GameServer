@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 
 namespace GameServerCore
 {
-
     public class Session : TcpSession
     {
         private ILogger _logger;
@@ -19,7 +18,9 @@ namespace GameServerCore
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
-            _packetHandler.Handle(buffer);
+            byte[] data = new byte[size];
+            Array.Copy(buffer, offset, data, 0, size);
+            _packetHandler.Handle(data);
             base.OnReceived(buffer, offset, size);
         }
 
