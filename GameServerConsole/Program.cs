@@ -48,9 +48,11 @@ namespace GameServerConsole
 
         public static void Start(IServiceProvider service)
         {
+            var packetHandler = service.GetRequiredService<PacketHandler>();
             var server = service.GetRequiredService<Server>();
             var simulation = service.GetRequiredService<SimulationService>();
 
+            packetHandler.Init();
             server.Start();
             simulation.StartAsync();
         }

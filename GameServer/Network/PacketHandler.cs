@@ -15,10 +15,14 @@ namespace GameServerCore
             _packetFactory = packetFactory;
             handleMethods = new Dictionary<Type, Delegate>();
             serviceProvider = service;
+        }
 
+        public void Init()
+        {
             IEnumerable<Type> types = Assembly.GetExecutingAssembly()
                 .GetTypes()
-                .Where(t => t.BaseType != null && t.BaseType.IsGenericType && t.BaseType.GetGenericTypeDefinition() == typeof(HandlePacket<>));
+                .Where(t => t.BaseType != null && t.BaseType.IsGenericType && t.BaseType.GetGenericTypeDefinition() == typeof(HandlePacket<>))
+                .ToList();
 
             foreach (var type in types)
             {
@@ -61,11 +65,15 @@ namespace GameServerCore
         public void Handle(byte[] data)
         {
             Packet packet = _packetFactory.GetPacket(data);
-            Type type = packet.GetType();
 
-            if (handleMethods.ContainsKey(type))
+            Handle(packet);
+        }
+
+        public void Handle<T>(T packet) where T : Packet
+        {
+            if (handleMethods.ContainsKey(typeof(T)))
             {
-                handleMethods[type].DynamicInvoke(packet);
+                handleMethods[typeof(T)].DynamicInvoke(packet);
             }
         }
     }
