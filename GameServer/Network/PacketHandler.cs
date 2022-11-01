@@ -69,11 +69,12 @@ namespace GameServerCore
             Handle(packet);
         }
 
-        public void Handle<T>(T packet) where T : Packet
+        public void Handle(Packet packet)
         {
-            if (handleMethods.ContainsKey(typeof(T)))
+            Type type = packet.GetType();
+            if (handleMethods.ContainsKey(type))
             {
-                handleMethods[typeof(T)].DynamicInvoke(packet);
+                handleMethods[type].DynamicInvoke(packet);
             }
         }
     }
