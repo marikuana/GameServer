@@ -40,7 +40,7 @@ namespace GameServerCore
                 else
                     Position = targetPosition;
             }
-            _logger.LogDebug($"Entity {Id} Pos: {Position}");
+            //_logger.LogDebug($"Entity {Id} Pos: {Position}");
         }
     }
 }
