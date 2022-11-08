@@ -23,16 +23,22 @@ namespace GameServerCore
 
             if (targetPos != null && Position != targetPos.Pos)
             {
+                Vector3 pos = Position;
+                Vector3 targetPosition = targetPos.Pos;
                 float speed = 0.001f;
 
-                float dis = (float)time.TotalMilliseconds * speed;
-                float disToPoint = (Position - targetPos.Pos).Length();
+                Vector3 direction = targetPosition - pos;
 
-                if (dis > disToPoint)
-                    dis = disToPoint;
+                float dist = (float)time.TotalMilliseconds * speed;
+                float disToPoint = direction.Length();
 
-                Vector3 vector = Vector3.Normalize(targetPos.Pos - Position);
-                Position += vector * dis; 
+                if (dist > disToPoint)
+                    dist = disToPoint;
+
+                if (disToPoint != 0)
+                    Position += direction / disToPoint * dist;
+                else
+                    Position = targetPosition;
             }
             _logger.LogDebug($"Entity {Id} Pos: {Position}");
         }
