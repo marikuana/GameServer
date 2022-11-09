@@ -5,16 +5,16 @@ namespace GameServerCore
 
     public abstract class GameObjectBuilder<T> where T : GameObject
     {
-        protected T GameObject;
+        protected GameObjectFactory<T> _factory;
 
         protected Guid _id;
         protected Vector3 _position;
         protected Vector3 _rotation;
 
-        public GameObjectBuilder(T gameObject)
+        public GameObjectBuilder(GameObjectFactory<T> factory)
         {
             _id = Guid.NewGuid();
-            GameObject = gameObject;
+            _factory = factory;
 
         }
 
@@ -32,11 +32,13 @@ namespace GameServerCore
 
         public virtual T Build()
         {
-            GameObject.Id = _id;
-            GameObject.Position = _position;
-            GameObject.Rotation = _rotation;
+            T gameObject = _factory.Create();
 
-            return GameObject;
+            gameObject.Id = _id;
+            gameObject.Position = _position;
+            gameObject.Rotation = _rotation;
+
+            return gameObject;
         }
     }
 }

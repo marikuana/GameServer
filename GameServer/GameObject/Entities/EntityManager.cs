@@ -18,11 +18,9 @@ namespace GameServerCore
 
         public Entity CreateEntity(Action<EntityBuilder> action)
         {
-            Entity entity = _entityFactory.Create();
-
-            EntityBuilder entityBuilder = new EntityBuilder(entity);
+            EntityBuilder entityBuilder = new EntityBuilder(_entityFactory);
             action(entityBuilder);
-            entity = entityBuilder.Build();
+            Entity entity = entityBuilder.Build();
 
             _gameObjectManager.AddGameObject(entity);
             

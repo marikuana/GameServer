@@ -6,7 +6,7 @@ namespace GameServerCore
     {
         private IPosition? _targetPosition;
 
-        public EntityBuilder(Entity gameObject) : base(gameObject)
+        public EntityBuilder(EntityFactory entityFactory) : base(entityFactory)
         {
         }
 
@@ -17,11 +17,11 @@ namespace GameServerCore
 
         public override Entity Build()
         {
-            base.Build();
+            Entity entity = base.Build();
 
-            GameObject.SetTargetPosition(_targetPosition);
+            entity.SetTargetPosition(_targetPosition);
 
-            return GameObject;
+            return entity;
         }
     }
 }
