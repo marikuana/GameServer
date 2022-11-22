@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreServer", "NetCoreSer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Packets", "Packets\Packets\Packets.csproj", "{6EB481C0-3636-4E29-8002-83B7D98786A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerConsole", "GameServerConsole\GameServerConsole.csproj", "{2BAF8FFB-79E9-4B81-83D1-69FBFE702274}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServerConsole", "GameServerConsole\GameServerConsole.csproj", "{2BAF8FFB-79E9-4B81-83D1-69FBFE702274}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServerData", "GameServerData\GameServerData\GameServerData.csproj", "{3B67A7DC-0CBF-4F14-B62D-5E8E42478EF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2BAF8FFB-79E9-4B81-83D1-69FBFE702274}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BAF8FFB-79E9-4B81-83D1-69FBFE702274}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BAF8FFB-79E9-4B81-83D1-69FBFE702274}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B67A7DC-0CBF-4F14-B62D-5E8E42478EF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B67A7DC-0CBF-4F14-B62D-5E8E42478EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B67A7DC-0CBF-4F14-B62D-5E8E42478EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B67A7DC-0CBF-4F14-B62D-5E8E42478EF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
