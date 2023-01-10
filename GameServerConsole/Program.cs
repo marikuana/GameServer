@@ -46,7 +46,10 @@ namespace GameServerConsole
             });
 
             services.AddSingleton<EntityFactory>();
+            services.AddSingleton<EntityBuilder>();
             services.AddSingleton<SpawnerFactory>();
+            services.AddSingleton<ZoneFactory>();
+            services.AddSingleton<ZoneSideFactory>();
 
             services.AddSingleton<EntityManager>();
             services.AddSingleton<GameObjectManager>();
