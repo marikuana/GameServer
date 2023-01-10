@@ -10,10 +10,12 @@ namespace GameServerCore
         private float _timeToNextSpawn;
 
         private GameObjectManager _gameObjectManager;
+        public EntityBuilder EntityBuilder { get; private set; }
 
-        public Spawner(ILogger<Spawner> logger, GameObjectManager gameObjectManager) : base(logger)
+        public Spawner(ILogger<Spawner> logger, GameObjectManager gameObjectManager, EntityBuilder entityBuilder) : base(logger)
         {
             _gameObjectManager = gameObjectManager;
+            EntityBuilder = entityBuilder;
         }
 
         public void SetSpawnPamameters(SpawnParameters spawnParameters)
@@ -43,13 +45,11 @@ namespace GameServerCore
             if (_entityFactory == null)
                 return;
 
-            EntityBuilder entityBuilder = new EntityBuilder(_entityFactory);
-            entityBuilder.SetPosition(Position);
-            entityBuilder.SetTargerPosition(new Position(new RandomPosition(100).Pos));
+            EntityBuilder.SetPosition(Position);
 
             for (int i = 0; i < SpawnParameters.SpawnCount; i++)
             {
-                Entity entity = entityBuilder.Build();
+                Entity entity = EntityBuilder.Build();
                 _gameObjectManager.AddGameObject(entity);
             }
         }
