@@ -27,5 +27,10 @@ namespace GameServerCore
             _logger.LogDebug($"CreateEntity: {entity.Position}");
             return entity;
         }
+
+        public IEnumerable<Entity> GetEntities()
+        {
+            return _gameObjectManager.GetObjects<Entity>();
+        }
     }
 }
