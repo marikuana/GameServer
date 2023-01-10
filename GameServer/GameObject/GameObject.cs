@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace GameServerCore
 {
-    public abstract class GameObject
+    public abstract class GameObject : IPosition
     {
         public Guid Id { get; set; }
         public Vector3 Position { get; set; }
+        public Vector3 Pos => Position;
         public Vector3 Rotation { get; set; }
 
         public event Action<GameObject>? OnDestroy;
@@ -28,7 +29,7 @@ namespace GameServerCore
 
         }
 
-        public void Destroy()
+        public virtual void Destroy()
         {
             OnDestroy?.Invoke(this);
         }
