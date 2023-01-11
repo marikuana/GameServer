@@ -7,15 +7,13 @@ namespace GameServerCore
     {
         protected GameObjectFactory<T> _factory;
 
-        protected Guid _id;
+        protected Guid? _id;
         protected Vector3 _position;
         protected Vector3 _rotation;
 
         public GameObjectBuilder(GameObjectFactory<T> factory)
         {
-            _id = Guid.NewGuid();
             _factory = factory;
-
         }
 
         public GameObjectBuilder<T> SetPosition(Vector3 position)
@@ -34,7 +32,7 @@ namespace GameServerCore
         {
             T gameObject = _factory.Create();
 
-            gameObject.Id = _id;
+            gameObject.Id = Guid.NewGuid();
             gameObject.Position = _position;
             gameObject.Rotation = _rotation;
 
