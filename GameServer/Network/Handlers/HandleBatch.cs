@@ -14,12 +14,13 @@ namespace GameServerCore
             _packetHandler = packetHandler;
         }
 
-        public override void Invoke(Batch batchPacket)
+        public override Packet? Invoke(Session session, Batch batchPacket)
         {
             foreach (var packet in batchPacket.Packets)
             {
-                _packetHandler.Handle(packet);
+                _packetHandler.Handle(session, packet);
             }
+            return null;
         }
     }
 }

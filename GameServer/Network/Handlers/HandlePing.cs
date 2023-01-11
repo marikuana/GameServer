@@ -1,16 +1,21 @@
-﻿using Packets;
+﻿using Microsoft.Extensions.Logging;
+using Packets;
 
 namespace GameServerCore
 {
     public class HandlePing : HandlePacket<Ping>
     {
-        public HandlePing()
-        {
+        private ILogger _logger;
 
+        public HandlePing(ILogger<HandlePing> logger)
+        {
+            _logger = logger;
         }
-        public override void Invoke(Ping packet)
-        {
 
+        public override Packet? Invoke(Session session, Ping packet)
+        {
+            _logger.LogDebug("Ping");
+            return packet;
         }
     }
 }

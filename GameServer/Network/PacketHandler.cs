@@ -45,7 +45,7 @@ namespace GameServerCore
                 parameters[i] = serviceProvider.GetRequiredService(parametersInfo[i].ParameterType);
             }
             var handlerPacket = constructor.Invoke(parameters); 
-            handleMethods.Add(packetType, Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(packetType), handlerPacket, "Invoke"));
+            handleMethods.Add(packetType, Delegate.CreateDelegate(typeof(HandleInvoke<>).MakeGenericType(packetType), handlerPacket, "Invoke"));
         }
 
         private void Register<T, K>() where K : Packet where T : HandlePacket<K>
@@ -62,20 +62,23 @@ namespace GameServerCore
             handleMethods.Add(typeof(K), handlerPacket.Invoke);
         }
 
-        public void Handle(byte[] data)
+        public void Handle(Session session, byte[] data)
         {
-            Packet packet = _packetFactory.GetPacket(data);
+            Packet? packet = _packetFactory.GetPacket(data);
 
-            Handle(packet);
+            if (packet != null)
+                Handle(session, packet);
         }
 
-        public void Handle(Packet packet)
+        public Packet? Handle(Session session, Packet packet)
         {
             Type type = packet.GetType();
+            Packet? responcePacket = null;
             if (handleMethods.ContainsKey(type))
             {
-                handleMethods[type].DynamicInvoke(packet);
+                responcePacket = (Packet?)handleMethods[type].DynamicInvoke(session, packet);
             }
+            return responcePacket;
         }
     }
 }

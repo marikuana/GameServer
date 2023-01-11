@@ -20,7 +20,7 @@ namespace GameServerCore
         {
             byte[] data = new byte[size];
             Array.Copy(buffer, offset, data, 0, size);
-            _packetHandler.Handle(data);
+            _packetHandler.Handle(this, data);
             base.OnReceived(buffer, offset, size);
         }
 

@@ -12,9 +12,10 @@ namespace GameServerCore
             _logger = logger;
         }
 
-        public override void Invoke(GoTo packet)
+        public override Packet? Invoke(Session session, GoTo packet)
         {
             _logger.LogDebug($"HandleMove: {packet.Position}");
+            return null;
         }
     }
 }
