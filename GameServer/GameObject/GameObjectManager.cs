@@ -13,6 +13,8 @@ namespace GameServerCore
         private object _lockRemove = new object();
         private List<GameObject> gameObjectsToRemove;
 
+        public event Action<GameObject>? OnAddGameObject;
+
         public GameObjectManager(ILogger<GameObjectManager> logger)
         {
             _gameObjects = new List<GameObject>();
@@ -27,6 +29,7 @@ namespace GameServerCore
             {
                 gameObjectsToAdd.Add(gameObject);
             }
+            OnAddGameObject?.Invoke(gameObject);
             gameObject.OnDestroy += RemoveGameObject;
         }
 
