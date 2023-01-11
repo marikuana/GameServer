@@ -10,5 +10,11 @@ namespace GameServerCore
         {
             Pos = pos;
         }
+
+        public Position(float x, float y, float z)
+            : this(new Vector3(x, y, z))
+        {
+
+        }
     }
 }
