@@ -59,6 +59,7 @@ namespace GameServerConsole
             services.AddSingleton<SimulationService>();
 
             services.AddSingleton<Packets.PacketFactory>();
+            services.AddSingleton<Packets.ResponcePacketFactory>();
             services.AddSingleton<PacketHandler>();
             services.AddSingleton<SessionFactory>();
             services.AddSingleton<Server>();
