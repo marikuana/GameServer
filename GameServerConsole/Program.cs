@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using GameServerCore;
+using GameServerCore.Api;
 using Microsoft.Extensions.Logging;
 using GameServerData;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,7 @@ namespace GameServerConsole
             services.AddSingleton<SessionFactory>();
             services.AddSingleton<Server>();
 
+            services.AddSingleton<Api>();
         }
     }
 }
