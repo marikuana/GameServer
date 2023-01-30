@@ -63,6 +63,7 @@ namespace GameServerConsole
             services.AddSingleton<PacketHandler>();
             services.AddSingleton<SessionFactory>();
             services.AddSingleton<Server>();
+            services.AddSingleton<NetworkManager>();
 
             services.AddSingleton<Api>();
         }

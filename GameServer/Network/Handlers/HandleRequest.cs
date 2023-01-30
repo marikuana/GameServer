@@ -8,12 +8,15 @@ namespace GameServerCore
         private ILogger _logger;
         private PacketHandler _packetHandler;
         private ResponcePacketFactory _responcePacketFactory;
+        private NetworkManager _networkManager;
 
-        public HandleRequest(ILogger<HandleRequest> logger, PacketHandler packetHandler, ResponcePacketFactory responcePacketFactory)
+        public HandleRequest(ILogger<HandleRequest> logger, PacketHandler packetHandler, ResponcePacketFactory responcePacketFactory, NetworkManager networkManager)
         {
             _logger = logger;
             _packetHandler = packetHandler;
             _responcePacketFactory = responcePacketFactory;
+            _networkManager = networkManager;
+
         }
 
         public override Packet? Invoke(Session session, Request request)
@@ -22,7 +25,7 @@ namespace GameServerCore
 
             Response response = _responcePacketFactory.CreateFromRequest(request);
             response.Packet = packet;
-            session.Send(response);
+            _networkManager.Send(session, response);
             return null;
         }
     }

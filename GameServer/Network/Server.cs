@@ -9,15 +9,15 @@ namespace GameServerCore
     {
         private ILogger _logger;
         private SessionFactory _sessionFactory;
-        private PacketFactory _packetFactory;
 
-        public Server(ILogger<Server> logger, SessionFactory sessionFactory, Configuration configuration, PacketFactory packetFactory)
+        public event Action<Session>? Connecting;
+        public event Action<Session>? Disconnecting;
+
+        public Server(ILogger<Server> logger, SessionFactory sessionFactory, Configuration configuration)
             : base(configuration.ListenerIP, configuration.ListenerPort)
         {
             _logger = logger;
             _sessionFactory = sessionFactory;
-            _packetFactory = packetFactory;
-            Task.Run(Sending);
         }
 
         protected override TcpSession CreateSession()
@@ -34,39 +34,6 @@ namespace GameServerCore
         }
 
         private Queue<Packet> toSend = new Queue<Packet>();
-        public void Sending()
-        {
-            while (true)
-            {
-                if (toSend.Count > 0)
-                {
-                    if (toSend.Count == 1)
-                    {
-                        Packet packet;
-                        lock (this)
-                        {
-                            packet = toSend.First();
-                            toSend.Clear();
-                        }
-                        Multicast(packet.GetBytes());
-                    }
-                    else
-                    {
-
-                        Batch batch = new Batch(_packetFactory);
-                        lock (this)
-                        {
-                            batch.Packets = toSend.ToArray();
-                            toSend.Clear();
-                        }
-
-                        Multicast(batch.GetBytes());
-                    }
-                }
-
-                Task.Delay(10).Wait();
-            }
-        }
 
         protected override void OnConnected(TcpSession session)
         {
@@ -77,6 +44,7 @@ namespace GameServerCore
         protected override void OnConnecting(TcpSession session)
         {
             _logger.LogDebug("Connecting");
+            Connecting?.Invoke((Session)session);
             base.OnConnecting(session);
         }
 
@@ -89,6 +57,7 @@ namespace GameServerCore
         protected override void OnDisconnecting(TcpSession session)
         {
             _logger.LogDebug("Disconnecting");
+            Disconnecting?.Invoke((Session)session);
             base.OnDisconnecting(session);
         }
 
