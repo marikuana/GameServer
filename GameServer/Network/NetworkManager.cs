@@ -29,7 +29,8 @@ namespace GameServerCore
         {
             lock (this)
             {
-                listToSend.Add(session, new Queue<Packet>());
+                if (!listToSend.ContainsKey(session))
+                    listToSend.Add(session, new Queue<Packet>());
             }
             OnConnecting?.Invoke(session);
         }
@@ -63,7 +64,17 @@ namespace GameServerCore
             }
         }
 
-        public void Sending()
+        public void SendOther(Session notSendSession, Packet packet)
+        {
+            foreach (var session in listToSend.Keys)
+            {
+                if (notSendSession.Equals(session))
+                    continue;
+                Send(session, packet);
+            }
+        }
+
+        private void Sending()
         {
             while (true)
             {
