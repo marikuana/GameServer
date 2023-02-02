@@ -1,5 +1,6 @@
 ﻿using GameServerCore;
 using System.Numerics;
+using GameServerCore.Map;
 
 namespace GameServerCore.Api
 {
@@ -84,7 +85,7 @@ namespace GameServerCore.Api
         private void Connect(Session session)
         {
             SendAllGameObjects(session);
-            Entity entity = _entityManager.CreateEntity(e => { });
+            Entity entity = _entityManager.CreateEntity();
             characters.Add(session, entity);
         }
 
