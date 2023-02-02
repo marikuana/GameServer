@@ -1,16 +1,22 @@
 ﻿using GameServerCore;
+using System.Numerics;
 
 namespace GameServerCore.Api
 {
     public class Api
     {
         private GameObjectManager _gameObjectManager;
-        private Server _server;
+        private EntityManager _entityManager;
+        private NetworkManager _networkManager;
 
-        public Api(GameObjectManager gameObjectManager, Server server)
+        public Api(GameObjectManager gameObjectManager, NetworkManager networkManager, EntityManager entityManager)
         {
             _gameObjectManager = gameObjectManager;
-            _server = server;
+            _networkManager = networkManager;
+            _entityManager = entityManager;
+
+            _networkManager.OnConnecting += Connect;
+            _networkManager.OnDisconnecting += Disconnect;
         }
 
         public void StartSend()
@@ -18,29 +24,83 @@ namespace GameServerCore.Api
             Task.Run(Sending);
             foreach (var gameObject in _gameObjectManager.GetObjects().ToList())
             {
-                gameObject.OnDestroy += SendDestroy;
+                RegisterGameObject(gameObject);
             }
-            _gameObjectManager.OnAddGameObject += (gameObject) =>
-            {
-                gameObject.OnDestroy += SendDestroy;
-            };
+            _gameObjectManager.OnAddGameObject += gameObject => RegisterGameObject(gameObject);
+        }
+
+        private void RegisterGameObject(GameObject gameObject)
+        {
+            gameObject.OnDestroy += SendDestroy;
+            gameObject.OnChangePosition += SendPosition;
         }
 
         public void Sending()
         {
             while (true)
             {
-                foreach (var gameObject in _gameObjectManager.GetObjects().ToList())
+                var list = new List<GameObject>();
+                lock (this)
                 {
-                    _server.Multicast(new Packets.GoTo() { EntityId = gameObject.Id, Position = gameObject.Position });
+                    list = sendNewPos.ToList();
+                    sendNewPos.Clear();
                 }
-                Task.Delay(1000 / 60).Wait();
+
+                foreach (var gameObject in list)
+                {
+                    _networkManager.Send(new Packets.GoTo() { EntityId = gameObject.Id, Position = gameObject.Position });
+                }
+                Task.Delay(millisecondsDealy).Wait();
+            }
+        }
+
+        private List<GameObject> sendNewPos = new List<GameObject>();
+        private int millisecondsDealy = 1000 / 60;
+
+        public void SendPosition(GameObject gameObject)
+        {
+            lock (this)
+            {
+                if (!sendNewPos.Contains(gameObject))
+                    sendNewPos.Add(gameObject);
             }
         }
 
         public void SendDestroy(GameObject gameObject)
         {
-            _server.Multicast(new Packets.Destroy() { EntityId = gameObject.Id });
+            _networkManager.Send(new Packets.Destroy() { EntityId = gameObject.Id });
+        }
+
+        public void SendAllGameObjects(Session session)
+        {
+            foreach (var gameObject in _gameObjectManager.GetObjects().ToList())
+            {
+                _networkManager.Send(session, new Packets.GoTo() { EntityId = gameObject.Id, Position = gameObject.Position });
+            }
+        }
+
+        private Dictionary<Session, Entity> characters = new Dictionary<Session, Entity>();
+
+        private void Connect(Session session)
+        {
+            SendAllGameObjects(session);
+            Entity entity = _entityManager.CreateEntity(e => { });
+            characters.Add(session, entity);
+        }
+
+        private void Disconnect(Session session)
+        {
+            if (characters.ContainsKey(session))
+            {
+                characters[session].Destroy();
+                characters.Remove(session);
+            }
+        }
+
+        public void Move(Session session, Vector3 pos)
+        {
+            if (characters.ContainsKey(session))
+                characters[session].SetTargetPosition(new Position(pos));
         }
     }
 }
