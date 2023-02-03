@@ -11,6 +11,7 @@ namespace GameServerCore
         public event Action<Attackable, float>? OnDamaged;
         public event Action<Attackable, float>? OnHeal;
         public event Action<Attackable>? OnDeath;
+        public event Action<Attackable, float>? OnHealthChange;
 
         public Attackable(ILogger logger) : base(logger)
         {
@@ -35,7 +36,11 @@ namespace GameServerCore
 
         public void SetHealth(float value)
         {
+            if (Health == value)
+                return;
+
             Health = value;
+            OnHealthChange?.Invoke(this, Health);
             if (!Avaliable)
                 OnDeath?.Invoke(this);
         }
